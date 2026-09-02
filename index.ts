@@ -2,7 +2,13 @@ const srv = Bun.serve({
     port: 3000,
     routes: {
         "/test": {
-            GET: () => new Response("Andrei Bobão_GET"),
+            GET: (req) => {
+                const url = new URL(req.url)
+                const search = url.searchParams
+                const nome = search.get("nome")
+                console.log(nome)
+                new Response("Andrei Bobão_GET")
+            },
 
             POST: async (req) => {
                 const body = await req.body.text()
