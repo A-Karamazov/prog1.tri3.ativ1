@@ -11,6 +11,12 @@ const srv = Bun.serve({
             },
         },
 
+        "/pessoa/:id": {
+            GET: (req) => {
+            return new Response(`oi ${req.params.id}`)
+            }
+        },
+
         "/test": {
             GET: (req) => {
                 const url = new URL(req.url)
