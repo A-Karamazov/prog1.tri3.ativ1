@@ -8,6 +8,13 @@ const query = db.query(`
         email           TEXT NOT NULL UNIQUE,
         password_hash   TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS lista_exercicios (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome            VARCHAR, 
+        descricao       VARCHAR,
+        grupoMuscular   VARCHAR,
+        tipo            VARCHAR
 `);
 query.run();
 
