@@ -12,14 +12,14 @@ const srv = Bun.serve({
     port: 3000,
     routes: {
         "/user": {
-                 GET: (req) => {
+            GET: (req) => {
                 const query = db.query(`
                     SELECT * FROM users
                 `)
-                const deResp = query.all ()
+                const deResp = query.all()
                 return Response.json(deResp)
             },
-            
+
             POST: async (req) => {
                 const body = await req.body.json();
                 const query = db.query(`
@@ -28,13 +28,10 @@ const srv = Bun.serve({
                 `)
                 const dbResp = query.run({
                     ':username': body.username,
-                    ':email' : body.email,
-                    ':password_hash':  body.password
+                    ':email': body.email,
+                    ':password_hash': body.password
                 })
-                return Response.json({
-                    "message": "deu bom",
-                    dbResp
-                })
+                return Response.json({ "message": "deu bom", dbResp })
             },
 
         },
@@ -59,17 +56,92 @@ const srv = Bun.serve({
                 const dbResp = query.run({
                     ':_id_': req.params.id,
                     ':username': body.username,
-                    ':email' : body.email,
-                    ':password_hash':  body.password
+                    ':email': body.email,
+                    ':password_hash': body.password
                 })
+                return Response.json({ "message": "deu bom", dbResp })
+            },
+            DELETE: (req) => {
+                const query = db.query(`
+            DELETE FROM lista_exercicios
+            WHERE id=:_id_
+            `)
+                const dbResp = query.run({
+                    ":_id_": req.params.id
+                })
+
                 return Response.json({
-                    "message": "deu bom",
+                    message: "Exercício deletado com sucesso",
                     dbResp
                 })
             },
-            DELETE: (req) => {
-                
+        },
+
+        "/exercicios": {
+            GET: (req) => {
+                const query = db.query(`
+                    SELECT * FROM lista_exercicios
+                `)
+                const deResp = query.all()
+                return Response.json(deResp)
             },
+            POST: async (req) => {
+                const body = await req.body.json();
+                const query = db.query(`
+                    INSERT INTO lista_exercicios(nome, descricao, grupoMuscular, tipo)
+                    VALUES(:nome, :descricao, :grupoMuscular, :tipo)    
+                `)
+                const dbResp = query.run({
+                    ':nome': body.nome,
+                    ':descricao': body.descricao,
+                    ':grupoMuscular': body.grupoMuscular,
+                    ':tipo': body.tipo
+                })
+                return Response.json({ "message": "Exercicio adicionado com sucesso", dbResp })
+            },
+        },
+
+        "/exercicios/:id": {
+            GET: (req) => {
+                const query = db.query(`
+                    SELECT * FROM lista_exercicios
+                    WHERE id=:_id_
+                `)
+                const deResp = query.get({ ":_id_": req.params.id })
+                return Response.json(deResp)
+            },
+
+            PUT: async (req) => {
+                const body = await req.body.json();
+                const query = db.query(`
+                    UPDATE lista_exercicios
+                    SET nome=:nome, descricao=:descricao, grupoMuscular=:grupoMuscular, tipo=:tipo
+                    WHERE id=:_id_;     
+                `)
+                const dbResp = query.run({
+                    ':nome': body.nome,
+                    ':descricao': body.descricao,
+                    ':grupoMuscular': body.grupoMuscular,
+                    ':tipo': body.tipo,
+                    ":_id_": req.params.id
+                })
+                return Response.json({ "message": "Exercicio modificado com sucesso", dbResp })
+            },
+
+            DELETE: (req) => {
+                const query = db.query(`
+                    DELETE FROM lista_exercicios
+                    WHERE id=:_id_
+                `)
+                const dbResp = query.run({
+                    ":_id_": req.params.id
+                })
+
+                return Response.json({
+                    message: "Exercício deletado com sucesso",
+                    dbResp
+                })
+            }
         }
     }
 })
