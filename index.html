@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <title>App</title>
+</head>
+<body>
+    <ul class="display"></ul>
+    <input class="campo-busca" type="number">
+    <button class="buscar">mostrar</button>
+    <div class="response">()</div>
+    <script>
+        async function init() {
+            const display = document.querySelector(".display")
+            const response = await fetch("/user")
+            const data = await response.json()
+            data.forEach(user => {
+                display.innerHTML += `<li>${user.username}</li>`
+            });
+        }
+
+        async function search() {
+            const campoBusca = document.querySelector(".campo-busca")
+            const display = document.querySelector(".response")
+            const response = await fetch(`/user/${campoBusca.value}`)
+            const data = await response.json()
+            display.innerHTML = data.username
+        }
+        btnBuscar = document.querySelector(".buscar")
+        btnBuscar?.addEventListener("click", search)
+
+        init()
+    </script>
+</body>
+</html>
