@@ -6,11 +6,15 @@
 // [D]elete  delete           delete
 // 
 
+import frontend from "./index.html"
 import { db } from "./db"
 
 const srv = Bun.serve({
     port: 3000,
     routes: {
+
+        "/": frontend,
+
         "/user": {
             GET: (req) => {
                 const query = db.query(`
