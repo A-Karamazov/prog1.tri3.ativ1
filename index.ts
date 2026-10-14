@@ -1,7 +1,7 @@
 import frontend from "./index.html"
 import { db } from "./db"
 
-const logged_users: anyusafisaailsuhuisf = {}
+const logged_users: any = {}
 
 const srv = Bun.serve({
     port: 3000,
