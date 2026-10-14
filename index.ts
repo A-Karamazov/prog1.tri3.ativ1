@@ -1,41 +1,46 @@
+import frontend from "./index.html"
+import { db } from "./db"
+
+const logged_users: any = {}
+
 const srv = Bun.serve({
     port: 3000,
     routes: {
-        "/": {
-            GET: (a) => {
-                const url = new URL(a.url)
-                const search = url.searchParams
-                const nome = search.get("nome")
-                console.log(nome)
-                return new Response("oi " + nome)
-            },
-        },
 
-        "/pessoa/:id": {
-            GET: (req) => {
-            return new Response(`oi ${req.params.id}`)
+        "/": frontend,
+
+        "/user": {
+            POST: async (req) => {
+                const body = await req.body?.json()
+                const query = db.query(`
+                    INSERT INTO user_secure(username, password_hash)
+                    VALUES(:username, :password_hash)    
+                `)
+                const hash = await Bun.password.hash(body.password)
+                const data = query.run({
+                    ":username": body.username,
+                    ":password_hash": hash
+                })
+                return Response.json(data)
             }
         },
-
-        "/test": {
-            GET: (req) => {
-                const url = new URL(req.url)
-                const search = url.searchParams
-                const nome = search.get("nome")
-                console.log(nome)
-                new Response("Andrei Bobão_GET")
-            },
-
+        
+        "/login": {
             POST: async (req) => {
-                const body = await req.body.text()
-                console.log(body)
-                return new Response("Andrei Bobão_POST")
-            },
-
-            PUT: () => new Response("Andrei Bobão_PUT"),
-            DELETE: () => new Response("Andrei Bobão_DELETE")
+                const body = await req.body?.json()
+                const query = db.query(`
+                    SELECT username FROM user_secure 
+                    WHERE username=:username 
+                    LIMIT 1    
+                `)
+                const data: any = query.get({
+                    ":username": body.username,
+                })
+                const hash = data.password_hash
+                const isMatch = Bun.password.verify(body.password)
+                logged_users[data.id] = data
+                return Response.json(isMatch)
+            }
         }
     }
 })
-
-console.log(`Server running: ${srv.url}`)

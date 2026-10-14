@@ -1,11 +1,3 @@
-//           Banco de Dados   HTTP
-// [C]reate  insert           post
-// [R]ead    select           get
-// [U]pdate  update           put
-// [U]pdate  update           patch
-// [D]elete  delete           delete
-// 
-
 import frontend from "./index.html"
 import { db } from "./db"
 
