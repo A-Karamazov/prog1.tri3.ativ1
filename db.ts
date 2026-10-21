@@ -3,20 +3,6 @@ import { Database } from "bun:sqlite";
 const db = new Database("database.sqlite");
 
 db.exec(`
-    // CREATE TABLE IF NOT EXISTS users (
-    //     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    //     username        TEXT NOT NULL UNIQUE,
-    //     email           TEXT NOT NULL UNIQUE,
-    //     password_hash   TEXT NOT NULL
-    // );
-
-    // CREATE TABLE IF NOT EXISTS lista_exercicios (
-    //     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    //     nome            TEXT, 
-    //     descricao       TEXT,
-    //     grupoMuscular   TEXT,
-    //     tipo            TEXT
-
     CREATE TABLE IF NOT EXISTS user_secure (
         id              INTEGER PRIMARY KEY AUTOINCREMENT,
         username        TEXT NOT NULL UNIQUE,
@@ -25,3 +11,4 @@ db.exec(`
 `);
 
 export { db }
+export default db
