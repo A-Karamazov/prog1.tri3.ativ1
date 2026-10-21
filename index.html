@@ -5,6 +5,8 @@
     <title>App</title>
 </head>
 <body>
+    <!-- pro old e older
+    
     <ul class="display"></ul>
     <input class="campo-busca" type="number">
     <button class="buscar">mostrar</button>
@@ -30,6 +32,72 @@
         btnBuscar?.addEventListener("click", search)
 
         init()
+    </script> -->
+
+    <a href=".login">login</a>
+    <a href=".cadastro">signin</a>
+
+    <form class="login">
+        <input type="text" name="username" placeholder="usuario">
+        <input type="password" name="password" placeholder="senha">
+        <button>entrar</button>
+    </form>
+
+    <form class="cadastro">
+        <input type="text" name="username" placeholder="usuario">
+        <input type="password" name="password" placeholder="senha">
+        <button>cadastrar-se</button>
+    </form>
+
+    <script>
+        //login
+        const frmLogin = document.querySelector('.login')
+        frmLogin.addEventListener('submit', async (ev) => {
+            ev.preventDefault()
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({
+                    "username": frmLogin.username.value,
+                    "password": frmLogin.password.value
+                })
+            })
+
+            if (response.status == 404)
+                return alert("Usuário não encontrado")
+
+            if (response.status == 401)
+                return alert("Senha incorreta")
+
+            if (response.ok) {
+                window.location.href = "/home"
+                return
+            }
+
+            alert("Não deveria chegar aqui")
+        })
+        const frmSignin = document.querySelector('.cadastro')
+        frmSignin.addEventListener('submit', async (ev) => {
+            ev.preventDefault()
+            const response = await fetch("/user", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({
+                    "username": frmSignin.username.value,
+                    "password": frmSignin.password.value
+                })
+            })
+            if (response.status == 404)
+                return alert("Usuário não encontrado")
+
+            if (response.status == 401)
+                return alert("Senha incorreta")
+
+            if (response.ok) {
+                window.location.href = "/home"
+                return
+            }
+        })
     </script>
 </body>
 </html>
