@@ -42,7 +42,7 @@
     <a class="mostrarLogin" href="#login">Entrar</a>
     <a class="mostrarCadastro" href="#cadastro">Cadastrar-se</a>
 
-    //Formulário de login 
+    //Formulário de login
     <form class="login" style="display: none;">
         <div>Fazer Login</div>
         <input type="text" name="username" placeholder="Usuário">
@@ -59,21 +59,8 @@
     </form>
 
     <script>
-        //Login
-        const frmLogin = document.querySelector('.login')
-        frmLogin.addEventListener('submit', async (ev) => {
-            ev.preventDefault() //Evita que a página seja recarregada
-
-            //Envia os dados do formulário para o servidor
-            const response = await fetch("/login", { 
-                method: "POST", 
-                headers: { "Content-type": "application/json" },
-                body: JSON.stringify({
-                    "username": frmLogin.username.value,
-                    "password": frmLogin.password.value
-                })
-            })
-
+        //Função para verificar a resposta do servidor e exibir alertas apropriados
+        async function verificarResposta(response) {
             if (response.status == 404) return alert("Usuário não encontrado")
 
             if (response.status == 401) return alert("Senha incorreta")
@@ -82,9 +69,27 @@
                 window.location.href = "/home"
                 return
             }
+        }
+
+        //Login
+        const frmLogin = document.querySelector('.login')
+        frmLogin.addEventListener('submit', async (ev) => {
+            ev.preventDefault() //Evita que a página seja recarregada
+
+            //Envia os dados do formulário para o servidor
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({
+                    "username": frmLogin.username.value,
+                    "password": frmLogin.password.value
+                })
+            })
+
+            verificarResposta(response)
         })
 
-        
+
 
         //Cadastro
         const frmSignin = document.querySelector('.cadastro')
@@ -98,15 +103,8 @@
                     "password": frmSignin.password.value
                 })
             })
-            
-            if (response.status == 404) return alert("Usuário não encontrado")
 
-            if (response.status == 401) return alert("Senha incorreta")
-
-            if (response.ok) {
-                window.location.href = "/home"
-                return
-            }
+            verificarResposta(response)
         })
 
 
