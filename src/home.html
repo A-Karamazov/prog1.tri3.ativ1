@@ -14,7 +14,8 @@
 
     <script>
         async function init() {
-            const response = await fetch("/login/user", "user")
+            //Verifica se o usuário está logado
+            const response = await fetch("/login/user", { credentials: "same-origin" }) 
 
             if (!response.ok) {
                 alert("Usuário não está logado")
@@ -22,9 +23,9 @@
                 return
             }
             const data = await response.json()
-            document.querySelector(".profile .username").textContent = data.username
-
+            document.querySelector(".profile .username").textContent = data.username 
         }
+        init()
     </script>
 </body>
 </html>

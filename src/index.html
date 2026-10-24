@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
     <meta charset='utf-8'>
     <title>App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- pro old e older
     
@@ -34,28 +37,36 @@
         init()
     </script> -->
 
-    <a href=".login">login</a>
-    <a href=".cadastro">signin</a>
 
-    <form class="login">
-        <input type="text" name="username" placeholder="usuario">
-        <input type="password" name="password" placeholder="senha">
-        <button>entrar</button>
+    //Ancoras para mostrar os formulários de login e cadastro
+    <a class="mostrarLogin" href="#login">Entrar</a>
+    <a class="mostrarCadastro" href="#cadastro">Cadastrar-se</a>
+
+    //Formulário de login 
+    <form class="login" style="display: none;">
+        <div>Fazer Login</div>
+        <input type="text" name="username" placeholder="Usuário">
+        <input type="password" name="password" placeholder="Senha">
+        <button>Entrar</button>
     </form>
 
-    <form class="cadastro">
-        <input type="text" name="username" placeholder="usuario">
-        <input type="password" name="password" placeholder="senha">
-        <button>cadastrar-se</button>
+    //Formulário de cadastro
+    <form class="cadastro" style="display: none;">
+        <div>Cadastrar-se</div>
+        <input type="text" name="username" placeholder="Usuário">
+        <input type="password" name="password" placeholder="Senha">
+        <button>Cadastrar-se</button>
     </form>
 
     <script>
-        //login
+        //Login
         const frmLogin = document.querySelector('.login')
         frmLogin.addEventListener('submit', async (ev) => {
-            ev.preventDefault()
-            const response = await fetch("/login", {
-                method: "POST",
+            ev.preventDefault() //Evita que a página seja recarregada
+
+            //Envia os dados do formulário para o servidor
+            const response = await fetch("/login", { 
+                method: "POST", 
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify({
                     "username": frmLogin.username.value,
@@ -63,19 +74,19 @@
                 })
             })
 
-            if (response.status == 404)
-                return alert("Usuário não encontrado")
+            if (response.status == 404) return alert("Usuário não encontrado")
 
-            if (response.status == 401)
-                return alert("Senha incorreta")
+            if (response.status == 401) return alert("Senha incorreta")
 
             if (response.ok) {
                 window.location.href = "/home"
                 return
             }
-
-            alert("Não deveria chegar aqui")
         })
+
+        
+
+        //Cadastro
         const frmSignin = document.querySelector('.cadastro')
         frmSignin.addEventListener('submit', async (ev) => {
             ev.preventDefault()
@@ -87,17 +98,34 @@
                     "password": frmSignin.password.value
                 })
             })
-            if (response.status == 404)
-                return alert("Usuário não encontrado")
+            
+            if (response.status == 404) return alert("Usuário não encontrado")
 
-            if (response.status == 401)
-                return alert("Senha incorreta")
+            if (response.status == 401) return alert("Senha incorreta")
 
             if (response.ok) {
                 window.location.href = "/home"
                 return
             }
         })
+
+
+        //Ancora Login
+        const linkLogin = document.querySelector(".mostrarLogin")
+        linkLogin.addEventListener("click", () => {
+            event.preventDefault();
+            frmLogin.style.display = "block";
+            frmSignin.style.display = "none"
+        });
+
+        //Ancora Cadstro
+        const linkCadastro = document.querySelector(".mostrarCadastro")
+        linkCadastro.addEventListener("click", () => {
+            event.preventDefault();
+            frmSignin.style.display = "block";
+            frmLogin.style.display = "none"
+        });
     </script>
 </body>
+
 </html>
