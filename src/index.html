@@ -38,11 +38,11 @@
     </script> -->
 
 
-    //Ancoras para mostrar os formulários de login e cadastro
+    <!-- Ancoras para mostrar os formulários de login e cadastro -->
     <a class="mostrarLogin" href="#login">Entrar</a>
     <a class="mostrarCadastro" href="#cadastro">Cadastrar-se</a>
 
-    //Formulário de login
+    <!-- Formulário de login -->
     <form class="login" style="display: none;">
         <div>Fazer Login</div>
         <input type="text" name="username" placeholder="Usuário">
@@ -50,7 +50,7 @@
         <button>Entrar</button>
     </form>
 
-    //Formulário de cadastro
+    <!-- Formulário de cadastro -->
     <form class="cadastro" style="display: none;">
         <div>Cadastrar-se</div>
         <input type="text" name="username" placeholder="Usuário">
@@ -64,6 +64,10 @@
             if (response.status == 404) return alert("Usuário não encontrado")
 
             if (response.status == 401) return alert("Senha incorreta")
+
+            if (response.status == 409) return alert("Usuário já existe")
+
+            if (response.status == 400) return alert("Preencha usuário e senha")
 
             if (response.ok) {
                 window.location.href = "/home"
@@ -125,5 +129,4 @@
         });
     </script>
 </body>
-
 </html>
